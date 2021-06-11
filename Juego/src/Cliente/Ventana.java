@@ -10,7 +10,9 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -31,8 +33,12 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 	private Thread thread;
 	private JFrame frame;
 	private boolean running = false;
-	private prueba2.Tank tank = new prueba2.Tank();
-
+	private static Socket socket;
+	private static PrintStream output;
+	private String mensaje;
+	private static int id;
+	private static LeerDatos leerdatos;
+	
 	public Ventana() {
 		Dimension size = new Dimension(width * scale, height * scale);
 		this.setPreferredSize(size);
@@ -67,10 +73,10 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			while (delta >= 1) {
-				send();
 				updates++;
 				delta--;
 				render();
+				id = leerdatos.id;
 			}
 			frames++;
 
@@ -85,7 +91,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void send() {
-		
+		output.println(id + "," + mensaje);
 	}
 
 	public void render() {
@@ -95,12 +101,18 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 			createBufferStrategy(3);
 			return;
 		}
-
+		
 		Graphics g = bs.getDrawGraphics();
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
-
-		g.fillRoundRect(tank.getX() + 10, tank.getY() - 15, 30, 30, 50, 50);
+		g.setColor(Color.black);
+		for (int i = 0; i < leerdatos.getJuego().getTanques().size(); i++) {
+//			System.out.println(leerdatos.getJuego().getTanques().get(i).getY());
+//			System.out.println(leerdatos.getJuego().getTanques().get(i).getX());
+			Servidor.Tanque t = leerdatos.getJuego().getTanques().get(i);
+			g.fillRect(t.getX(), t.getY(), t.getAncho(), t.getAlto());
+			//System.out.println("pintar tanque");
+		}
 
 		g.dispose();
 		bs.show();
@@ -109,16 +121,15 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 	public static void main(String[] args) {
 		try {
 			System.out.println("Client -> Start");
-			Socket socket = new Socket(SERVER, PORT);// open socket
-			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			OutputStream output = socket.getOutputStream();
-			ObjectOutputStream objectOutput = (ObjectOutputStream) socket.getOutputStream();
-			//objectOutput.writeObject();
+			socket = new Socket(SERVER, PORT);// open socket
+			leerdatos = new LeerDatos(new ObjectInputStream(socket.getInputStream()));
+			leerdatos.start();
+			System.out.println("leerdatos start");
+			output = new PrintStream(socket.getOutputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		Ventana ventana = new Ventana();
 		ventana.addKeyListener(ventana);
 		ventana.frame.setResizable(false);
@@ -134,8 +145,30 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+		switch (arg0.getKeyCode()) {
+		case KeyEvent.VK_LEFT:
+			mensaje = "moverDerecha";
+			send();
+			break;
+		case KeyEvent.VK_RIGHT:
+			mensaje = "moverIzquierda";
+			send();
+			break;
+		case KeyEvent.VK_UP:
+			mensaje = "subirCanyon";
+			send();
+			break;
+		case KeyEvent.VK_DOWN:
+			mensaje = "bajarCanyon";
+			send();
+			break;
+		case KeyEvent.VK_SPACE:
+			mensaje = "disparar";
+			send();
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override

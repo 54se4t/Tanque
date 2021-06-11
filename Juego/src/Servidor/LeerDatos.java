@@ -11,6 +11,7 @@ public class LeerDatos extends Thread{
 		this.leerDatos = leerDatos;
 		this.enviarDatos = enviarDatos;
 		this.juego = juego;
+		enviarDatos.enviarDatos(juego);
 	}
 	public void run() {
 		String line = null;
@@ -18,21 +19,29 @@ public class LeerDatos extends Thread{
 		while (repetir) {
 			try {
 				line = leerDatos.readLine();
-				String mensaje = line.substring(line.indexOf(",")+1,line.length()-1);
+				String mensaje = line.substring(line.indexOf(",")+1,line.length());
 				int idTanque = Integer.parseInt(line.substring(0,line.indexOf(",")));
-				System.out.println(line);
+				//System.out.println(idTanque);
+				//juego.tanques.get(idTanque).moverDerecha();
+//				juego.tanques.get(idTanque).y += 100;
+//				System.out.println(line);
 				switch (mensaje) {
 					case "moverDerecha" :
 						juego.tanques.get(idTanque).moverDerecha();
+						System.out.println("id:" + idTanque + ",moverDerecha");
 						break;
 					case "moverIzquierda" :
 						juego.tanques.get(idTanque).moverIzquierda();
+						System.out.println("id:" + idTanque + ",moverIzquierda");
 						break;
 					case "disparar" :
 						juego.tanques.get(idTanque).disparar();
+						System.out.println("id:" + idTanque + ",disparar");
 						break;
 				}
-				
+
+				System.out.println(juego.tanques.get(idTanque).x);
+				enviarDatos.enviarDatos(juego);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

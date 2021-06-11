@@ -1,8 +1,9 @@
 package Servidor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Juego {
+public class Juego implements Serializable{
 	private static boolean corriendo = false;
 	ArrayList<Tanque> tanques = new ArrayList<Tanque>();
 	Mapa mapa = new Mapa(960, 540);
@@ -30,9 +31,13 @@ public class Juego {
 		tq.setX(100);
 		tanques.add(tq);
 	}
+
+	public ArrayList<Tanque> getTanques() {
+		return tanques;
+	}
 }
 
-class ObjetoJuego {
+class ObjetoJuego implements Serializable{
 	protected double x;
 	protected double y;
 	protected int ancho;
@@ -66,47 +71,9 @@ class ObjetoJuego {
 		
 }
 
-class Tanque extends ObjetoJuego {
-	private final int VELOCIDAD_MOVER = 5;
-	private static int contador = 0;
-	private int id;
-	private double anguloCanyon;
-	private Bomba bomba = new Bomba();
-	
-	public Tanque() {
-		id = contador;
-		contador++;
-		ancho = 50;
-		alto = 20;
-	}
-	
-	public int getId() {
-		return id;
-	}
 
-	public void moverDerecha() {
-		x -= VELOCIDAD_MOVER;
-	}
-	public void moverIzquierda() {
-		x += VELOCIDAD_MOVER;
-	}
-	
-	public void subirCanyon() {
-		anguloCanyon += 1;
-	}
-	public void bajarCanyon() {
-		anguloCanyon -= 1;
-	}
-	
-	public void disparar() {
-		bomba.volar();
-	}
-	public void recargar() {
-		bomba = new Bomba();
-	} 
-}
 
-class Bomba extends ObjetoJuego {
+class Bomba extends ObjetoJuego implements Serializable{
 	private boolean volando = false;
 	private double velocidadVolar;
 	private double velocidadCaer;
@@ -149,7 +116,7 @@ class Bomba extends ObjetoJuego {
 	}
 }
 
-class Mapa {
+class Mapa implements Serializable{
 	private int ancho;
 	private int alto;
 	private int[] pixeles;

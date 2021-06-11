@@ -21,8 +21,9 @@ public class EnviarDatos {
 	public void enviarDatos(Juego juego) {
 		for (ObjectOutputStream ou : outputs) {
 			try {
-				ou.writeObject(juego.mapa);
-				ou.writeObject(juego.tanques);
+				ou.flush();
+				ou.writeObject(juego);
+				ou.flush();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e);

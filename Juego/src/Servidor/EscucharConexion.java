@@ -25,8 +25,6 @@ public class EscucharConexion extends Thread {
 			try {
 				cliente = servidor.accept();
 				juego.anyadirTanque();
-				PrintStream output = new PrintStream(cliente.getOutputStream());
-				output.println(juego.tanques.get(juego.tanques.size()-1).getId());
 				BufferedReader input = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 				enviarDatos.anyadirOutput(cliente);
 				LeerDatos leerDatos = new LeerDatos(input, enviarDatos, juego);
