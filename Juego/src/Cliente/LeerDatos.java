@@ -1,38 +1,46 @@
 package Cliente;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
-import Servidor.Juego;
-import Servidor.Tanque;
+import java.util.ArrayList;
 
 public class LeerDatos extends Thread{
-	Servidor.Juego juego;
-	ObjectInputStream obj;
-	int id = 876565685;
+	BufferedReader leerDatos;
+	int id;
+	String line;
+	int mapaAncho;
+	int mapaAlto;
+	int[] mapaPixeles;
+	ArrayList<Integer> tanqueId;
+	ArrayList<Integer> tanqueAncho;
+	ArrayList<Integer> tanqueAlto;
+	ArrayList<Double> tanqueX;
+	ArrayList<Double> tanqueY;
+	ArrayList<Double> anguloCanyon;
+	ArrayList<Integer> bombaAlto;
+	ArrayList<Integer> bombaAncho;
+	ArrayList<Double> bombaX;
+	ArrayList<Double> bombaY;
 	
-	public LeerDatos(ObjectInputStream obj) {
-		this.obj = obj;
+	
+	
+	public LeerDatos(BufferedReader leerDatos) {
+		this.leerDatos = leerDatos;
+		try {
+			line = leerDatos.readLine();
+			asignarDatos(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void run() {
 		while(true) {
 			try {
-				System.out.println("**********");
-				System.out.println("Esperando objeto");
-				juego = (Servidor.Juego) obj.readObject();
-				System.out.println("Recibido objeto");
-				if (id == 876565685) {
-					id = juego.getTanques().get(juego.getTanques().size()-1).getId();
-					System.out.println(id);
-				}
-				for (Tanque t : juego.getTanques()) {
-					System.out.println("id:" + t.getId() + ",xy" + t.getX() + "|" +t.getY());
-				}
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				line = leerDatos.readLine();
+				asignarDatos(false);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -40,9 +48,91 @@ public class LeerDatos extends Thread{
 		}
 	}
 
-	public Servidor.Juego getJuego() {
-		return juego;
-	}
 
+	public void asignarDatos(boolean nuevoId) {
+		reestablecerDatos();
+		String mapa = line.substring(0,line.indexOf("-"));
+		line = line.substring(line.indexOf("-")+1);
+		leerMapa(mapa);
+		leerTanques(line);
+		if (nuevoId) {
+			id = tanqueId.get(tanqueId.size()-1);
+			for (int i : tanqueId)
+				System.out.println(i);
+		}
+
+	}
+	
+	private void leerMapa(String mapa) {
+		mapaAncho = Integer.parseInt(mapa.substring(6, mapa.indexOf(",")));
+		mapa = mapa.substring(mapa.indexOf(",")+1);
+		mapaAlto = Integer.parseInt(mapa.substring(5, mapa.indexOf(",")));
+		mapa = mapa.substring(mapa.indexOf(",")+1);
+		String mapaPixelesString = mapa.substring(8);
+		mapaPixeles = new int[mapaAncho*mapaAlto/100];
+		int indexPixel = 0;
+		int contador = 0;
+		for (int i = 0; i < mapaPixelesString.length(); i++) {
+			if (mapaPixelesString.charAt(i) == '|') {
+				mapaPixeles[contador] = Integer.parseInt(mapaPixelesString.substring(indexPixel, i));
+				indexPixel = i+1;
+				contador++;
+			}
+		}
+	}
+	
+	private void leerTanques(String tanques) {
+		System.out.println("leerTanques empezar");
+		String tanque;
+		do {
+			tanque= tanques.substring(0, tanques.indexOf("-"));
+			tanques = tanques.substring(tanques.indexOf("-")+1);
+			System.out.println(tanques);
+			
+			tanqueId.add(Integer.parseInt(tanque.substring(3, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			tanqueAncho.add(Integer.parseInt(tanque.substring(6, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			tanqueAlto.add(Integer.parseInt(tanque.substring(5, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			tanqueX.add(Double.parseDouble(tanque.substring(2, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			tanqueY.add(Double.parseDouble(tanque.substring(2, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			anguloCanyon.add(Double.parseDouble(tanque.substring(13, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			bombaAlto.add(Integer.parseInt(tanque.substring(10, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			bombaAncho.add(Integer.parseInt(tanque.substring(11, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			bombaX.add(Double.parseDouble(tanque.substring(7, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			bombaY.add(Double.parseDouble(tanque.substring(7)));
+			
+			System.out.println(tanque);
+		} while (tanques.indexOf(",") != -1);
+	}
+	
+	private void reestablecerDatos() {
+		tanqueId = new ArrayList<Integer>();
+		tanqueAncho = new ArrayList<Integer>();
+		tanqueAlto = new ArrayList<Integer>();
+		tanqueX = new ArrayList<Double>();
+		tanqueY = new ArrayList<Double>();
+		anguloCanyon = new ArrayList<Double>();
+		bombaAlto = new ArrayList<Integer>();
+		bombaAncho = new ArrayList<Integer>();
+		bombaX = new ArrayList<Double>();
+		bombaY = new ArrayList<Double>();
+	}
 	
 }

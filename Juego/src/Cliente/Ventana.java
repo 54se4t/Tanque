@@ -76,7 +76,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 				updates++;
 				delta--;
 				render();
-				id = leerdatos.id;
+				//id = leerdatos.id;
 			}
 			frames++;
 
@@ -106,14 +106,9 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
-		for (int i = 0; i < leerdatos.getJuego().getTanques().size(); i++) {
-//			System.out.println(leerdatos.getJuego().getTanques().get(i).getY());
-//			System.out.println(leerdatos.getJuego().getTanques().get(i).getX());
-			Servidor.Tanque t = leerdatos.getJuego().getTanques().get(i);
-			g.fillRect(t.getX(), t.getY(), t.getAncho(), t.getAlto());
-			//System.out.println("pintar tanque");
+		for (int i = 0; i < leerdatos.tanqueId.size(); i++) {
+			g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int)(leerdatos.tanqueY.get(i)+0), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
 		}
-
 		g.dispose();
 		bs.show();
 	}
@@ -122,10 +117,13 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		try {
 			System.out.println("Client -> Start");
 			socket = new Socket(SERVER, PORT);// open socket
-			leerdatos = new LeerDatos(new ObjectInputStream(socket.getInputStream()));
+			System.out.println("Client -> conectar");
+			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			leerdatos = new LeerDatos(input);
 			leerdatos.start();
-			System.out.println("leerdatos start");
+			System.out.println("Client -> leerdatos");
 			output = new PrintStream(socket.getOutputStream());
+			id = leerdatos.id;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -141,6 +139,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		ventana.frame.setVisible(true);
 
 		ventana.start();
+		System.out.println("Client -> empezarVentana");
 	}
 
 	@Override

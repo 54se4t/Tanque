@@ -1,34 +1,27 @@
 package Servidor;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 public class EnviarDatos {
-	ArrayList<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
+	ArrayList<PrintStream> outputs = new ArrayList<PrintStream>();
 	
-	public void anyadirOutput(Socket socket) {
-		try {
-			OutputStream output = socket.getOutputStream();
-			outputs.add(new ObjectOutputStream(output));
-		} catch (IOException e) {
-			System.out.println(e);
-			System.out.println("EnviarDatos");
-		}
+	public void addOutput(PrintStream output) {
+		outputs.add(output);
 	}
-	public void enviarDatos(Juego juego) {
-		for (ObjectOutputStream ou : outputs) {
-			try {
-				ou.flush();
-				ou.writeObject(juego);
-				ou.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println(e);
-				System.out.println("EnviarDatos");
-			}
+	public void enviarMensaje(Juego juego) {
+		System.out.println("Empezar enviarmensaje");
+		String mensaje;
+		System.out.println("mapa....");
+		mensaje = juego.mapa.toString();
+		System.out.println("tanques....");
+		for (int i = 0; i < juego.getTanques().size(); i++) {
+			mensaje += juego.getTanques().get(i).toString();
 		}
+		System.out.println(mensaje);
+		for (PrintStream p : outputs)
+			p.println(mensaje);
+
+		System.out.println("terminar enviarmensaje");
 	}
 }

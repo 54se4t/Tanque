@@ -124,21 +124,37 @@ class Mapa implements Serializable{
 	public Mapa(int ancho, int alto) {
 		this.ancho = ancho;
 		this.alto = alto;
-		pixeles = new int[ancho*alto];
+		setPixeles((new int[ancho*alto/100]));
 	}
 	
 	public void pintar() {
-		int cielo = (int) (pixeles.length*0.7);
-		for (int i = 0; i < pixeles.length; i++ ) {
+		int cielo = (int) (getPixeles().length*0.7);
+		for (int i = 0; i < getPixeles().length; i++ ) {
 			if (i < cielo) 
-				pixeles[i] = 0x000000; 
+				getPixeles()[i] = 0x000000; 
 			else 
-				pixeles[i] = 0xFFFFFF;
+				getPixeles()[i] = 0xFFFFFF;
 		}
 	}
-	
 	public int[] getPiexeles() {
+		return getPixeles();
+	}
+	
+	@Override
+	public String toString() {
+		String pixel = "";
+		for (int i:pixeles) {
+			pixel += i + "|";
+		}
+		return "ancho:" + ancho + ",alto:" + alto + ",pixeles:" + pixel + "-";
+	}
+
+	public int[] getPixeles() {
 		return pixeles;
+	}
+
+	public void setPixeles(int[] pixeles) {
+		this.pixeles = pixeles;
 	}
 }
 

@@ -11,7 +11,7 @@ public class LeerDatos extends Thread{
 		this.leerDatos = leerDatos;
 		this.enviarDatos = enviarDatos;
 		this.juego = juego;
-		enviarDatos.enviarDatos(juego);
+		enviarDatos.enviarMensaje(juego);
 	}
 	public void run() {
 		String line = null;
@@ -24,7 +24,7 @@ public class LeerDatos extends Thread{
 				//System.out.println(idTanque);
 				//juego.tanques.get(idTanque).moverDerecha();
 //				juego.tanques.get(idTanque).y += 100;
-//				System.out.println(line);
+				System.out.println(line);
 				switch (mensaje) {
 					case "moverDerecha" :
 						juego.tanques.get(idTanque).moverDerecha();
@@ -41,7 +41,7 @@ public class LeerDatos extends Thread{
 				}
 
 				System.out.println(juego.tanques.get(idTanque).x);
-				enviarDatos.enviarDatos(juego);
+				enviarDatos.enviarMensaje(juego);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
