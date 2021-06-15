@@ -24,18 +24,13 @@ public class EscucharConexion extends Thread {
 		while (true) {
 			try {
 				cliente = servidor.accept();
-				System.out.println("accept");
 				juego.anyadirTanque();
 				BufferedReader input = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 				enviarDatos.addOutput(new PrintStream(cliente.getOutputStream()));
-				System.out.println("enviarDatos addOutput");
 				LeerDatos leerDatos = new LeerDatos(input, enviarDatos, juego);
-				System.out.println("new LeerDatos");
 				leerDatos.start();
-				System.out.println(juego.tanques.get(juego.tanques.size()-1).getId());
 			} catch (Exception e) {
 				System.out.println(e);
-				System.out.println("EscucharConexion");
 			}
 		}
 	}

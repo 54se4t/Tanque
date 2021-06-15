@@ -13,6 +13,7 @@ public class Servidor {
 	    	ServerSocket server = new ServerSocket(PORT);
 	    	System.out.println("Server started");  
 	    	Juego juego = new Juego();
+	    	juego.start();
 	    	EscucharConexion ec = new EscucharConexion(server, juego);
 	    	ec.start();
 	    	System.out.println("Enter to stop server");

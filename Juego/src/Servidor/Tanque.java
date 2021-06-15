@@ -40,6 +40,13 @@ public class Tanque extends ObjetoJuego implements Serializable{
 	public void recargar() {
 		bomba = new Bomba();
 	} 
+	
+	public void caer(Mapa mapa) {
+		int posision = (int) (y*mapa.getAlto() + x)/100;
+		System.out.println("caer:" + mapa.getPiexeles()[posision]);
+		if (y >= 0 && y <= mapa.getAlto() && mapa.getPiexeles()[posision] != 0) 
+			y++;
+	}
 	@Override
 	public String toString() {
 		return "id:" + id + ",ancho:" + ancho + ",alto:" + alto + ",x:" + x + ",y:" + y + ",anguloCanyon:" + anguloCanyon + ",bombaAlto:" + bomba.alto + ",bombaAncho:" + bomba.ancho + ",bombaX:" + bomba.x + ",bombaY:" + bomba.y + "-";

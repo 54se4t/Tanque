@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,10 +41,14 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 	private static int id;
 	private static LeerDatos leerdatos;
 	
+	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	private int[] pixeles = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+	
 	public Ventana() {
 		Dimension size = new Dimension(width * scale, height * scale);
 		this.setPreferredSize(size);
 		frame = new JFrame();
+		
 	}
 
 	public synchronized void start() {
@@ -102,10 +108,18 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 			return;
 		}
 		
-		Graphics g = bs.getDrawGraphics();
+		Graphics g = bs.getDrawGraphics();		
+		
+		for (int i = 0; i < pixeles.length; i++) {
+			pixeles[i] = leerdatos.mapaPixeles[i/100];
+		}
+		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.black);
+
+		
 		for (int i = 0; i < leerdatos.tanqueId.size(); i++) {
 			g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int)(leerdatos.tanqueY.get(i)+0), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
 		}

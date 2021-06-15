@@ -3,14 +3,14 @@ package Servidor;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Juego implements Serializable{
-	private static boolean corriendo = false;
+public class Juego extends Thread implements Serializable{
+	private static boolean corriendo = true;
 	ArrayList<Tanque> tanques = new ArrayList<Tanque>();
 	Mapa mapa = new Mapa(960, 540);
 	
-	private static void actualizar() {
+	public void run() {
 		long lastTime = System.nanoTime();
-		final double ns = 1000000000.0 / 60.0;
+		final double ns = 1000000000.0 / 30.0;
 		double delta = 0;
 		
 		while (corriendo) {
@@ -19,7 +19,9 @@ public class Juego implements Serializable{
 			lastTime = now;
 			
 			while (delta >= 1) {
-				//***** codigos que hay que actualizar *****
+				//System.out.print("");
+				for (Tanque t : tanques) 
+						t.caer(mapa);
 			}
 			
 		}
@@ -121,21 +123,51 @@ class Mapa implements Serializable{
 	private int alto;
 	private int[] pixeles;
 	
+	public int getAncho() {
+		return ancho;
+	}
+
+	public int getAlto() {
+		return alto;
+	}
+
 	public Mapa(int ancho, int alto) {
 		this.ancho = ancho;
 		this.alto = alto;
 		setPixeles((new int[ancho*alto/100]));
+		pintar();
 	}
 	
 	public void pintar() {
-		int cielo = (int) (getPixeles().length*0.7);
+		int cielo = (int) (getPixeles().length*0.5);
 		for (int i = 0; i < getPixeles().length; i++ ) {
 			if (i < cielo) 
-				getPixeles()[i] = 0x000000; 
+				getPixeles()[i] = 0xFFFFFF; 
 			else 
-				getPixeles()[i] = 0xFFFFFF;
+				getPixeles()[i] = 0x000000;
 		}
 	}
+	
+	public void actualizar() {
+		for (int i = 0; i < getPixeles().length; i++ ) {
+			if (getPixeles()[i] == 0x000000) {
+				int distIzq = i%(ancho/100);
+				if ((i + ancho/100) < getPixeles().length && getPixeles()[i + ancho/100] == 0xFFFFFF){
+					getPixeles()[i] = 0xFFFFFF;
+					getPixeles()[i + ancho/100] = 0x000000;
+				} 
+				else if ((i + ancho/100 - 1) < getPixeles().length - 1 && getPixeles()[i + ancho/100 - 1] == 0xFFFFFF) {
+					getPixeles()[i] = 0xFFFFFF;
+					getPixeles()[i + ancho/100 - 1] = 0x000000;
+				} 
+				else if ((i + ancho/100 + 1) < getPixeles().length && getPixeles()[i + ancho/100 + 1] == 0xFFFFFF) {
+					getPixeles()[i] = 0xFFFFFF;
+					getPixeles()[i + ancho/100 + 1] = 0x000000;
+				}
+			}
+		}
+	}
+	
 	public int[] getPiexeles() {
 		return getPixeles();
 	}
