@@ -5,12 +5,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,7 +21,10 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Ventana extends Canvas implements Runnable, KeyListener {
@@ -41,6 +46,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 	private static int id;
 	private static LeerDatos leerdatos;
 	
+	private Fondo fondo;
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	private int[] pixeles = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
@@ -48,6 +54,9 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		Dimension size = new Dimension(width * scale, height * scale);
 		this.setPreferredSize(size);
 		frame = new JFrame();
+		
+		fondo = new Fondo(width, height);
+		 
 		
 	}
 
@@ -82,7 +91,6 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 				updates++;
 				delta--;
 				render();
-				//id = leerdatos.id;
 			}
 			frames++;
 
@@ -110,18 +118,32 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		
 		Graphics g = bs.getDrawGraphics();		
 		
+		fondo.borrar();
+		fondo.pintar();
 		for (int i = 0; i < pixeles.length; i++) {
-			pixeles[i] = leerdatos.mapaPixeles[i/100];
+			pixeles[i] = fondo.pixeles[i];
 		}
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(Color.black);
-
+		//g.setColor(Color.WHITE);
+		//g.fillRect(0, 0, getWidth(), getHeight());
 		
 		for (int i = 0; i < leerdatos.tanqueId.size(); i++) {
-			g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int)(leerdatos.tanqueY.get(i)+0), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
+			g.setColor(Color.black);
+			int tanqueX = (int)(leerdatos.tanqueX.get(i)+0);
+			int tanqueY = (int) (getHeight()*fondo.TIERRA) - leerdatos.tanqueAlto.get(i);
+
+			Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
+			g2.setColor(Color.BLACK);
+			g2.rotate(-Math.PI/18*leerdatos.anguloCanyon.get(i), tanqueX + leerdatos.tanqueAncho.get(i)/2, tanqueY);
+			g2.drawRect( tanqueX + leerdatos.tanqueAncho.get(i)/2 - 5 , tanqueY - 5, 30, 10);
+			//g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int) (getHeight()*fondo.TIERRA) - leerdatos.tanqueAlto.get(i), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
+			g2.dispose();
+			g.setColor(Color.RED);
+			g.drawRoundRect(leerdatos.bombaX.get(i), leerdatos.bombaY.get(i), leerdatos.bombaAlto.get(i), leerdatos.bombaAncho.get(i), 50, 50);
+			g.fillRoundRect(tanqueX+5, tanqueY, 40, 40, 50, 50);
+			g.setColor(Color.GRAY);
+			g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int) (getHeight()*fondo.TIERRA), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
 		}
 		g.dispose();
 		bs.show();

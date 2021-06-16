@@ -5,31 +5,40 @@ import java.util.ArrayList;
 
 public class Juego extends Thread implements Serializable{
 	private static boolean corriendo = true;
+	private EnviarDatos enviarDatos;
 	ArrayList<Tanque> tanques = new ArrayList<Tanque>();
-	Mapa mapa = new Mapa(960, 540);
+	public Juego(EnviarDatos enviarDatos) {
+		this.enviarDatos = enviarDatos;
+	}
 	
 	public void run() {
 		long lastTime = System.nanoTime();
-		final double ns = 1000000000.0 / 30.0;
+		final double ns = 1000000000.0 / 60.0;
 		double delta = 0;
-		
+		System.out.println("Emp");
+		int count = 0;
 		while (corriendo) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
-			
 			while (delta >= 1) {
-				//System.out.print("");
-				for (Tanque t : tanques) 
-						t.caer(mapa);
+				for (Tanque t : tanques) {
+					t.getBomba().mover();
+					if (t.getBomba().x < 0 || t.getBomba().x > 960 || t.getBomba().y > 350) {
+						t.setXYbomba();
+						t.getBomba().volar();
+					}
+				}
+				enviarDatos.enviarMensaje(this);
+				delta--;
 			}
-			
 		}
+		System.out.println("terminado");
 	}
 	
 	public void anyadirTanque() {
 		Tanque tq = new Tanque();
-		tq.setY(100);
+		tq.setY(304);
 		tq.setX(100);
 		tanques.add(tq);
 	}
@@ -95,7 +104,10 @@ class Bomba extends ObjetoJuego implements Serializable{
 	}
 
 	public void volar() {
-		volando = true;
+		if (volando)
+			volando = false;
+		else
+			volando = true;
 	}
 	
 	public void mover() {
@@ -117,77 +129,3 @@ class Bomba extends ObjetoJuego implements Serializable{
 		}
 	}
 }
-
-class Mapa implements Serializable{
-	private int ancho;
-	private int alto;
-	private int[] pixeles;
-	
-	public int getAncho() {
-		return ancho;
-	}
-
-	public int getAlto() {
-		return alto;
-	}
-
-	public Mapa(int ancho, int alto) {
-		this.ancho = ancho;
-		this.alto = alto;
-		setPixeles((new int[ancho*alto/100]));
-		pintar();
-	}
-	
-	public void pintar() {
-		int cielo = (int) (getPixeles().length*0.5);
-		for (int i = 0; i < getPixeles().length; i++ ) {
-			if (i < cielo) 
-				getPixeles()[i] = 0xFFFFFF; 
-			else 
-				getPixeles()[i] = 0x000000;
-		}
-	}
-	
-	public void actualizar() {
-		for (int i = 0; i < getPixeles().length; i++ ) {
-			if (getPixeles()[i] == 0x000000) {
-				int distIzq = i%(ancho/100);
-				if ((i + ancho/100) < getPixeles().length && getPixeles()[i + ancho/100] == 0xFFFFFF){
-					getPixeles()[i] = 0xFFFFFF;
-					getPixeles()[i + ancho/100] = 0x000000;
-				} 
-				else if ((i + ancho/100 - 1) < getPixeles().length - 1 && getPixeles()[i + ancho/100 - 1] == 0xFFFFFF) {
-					getPixeles()[i] = 0xFFFFFF;
-					getPixeles()[i + ancho/100 - 1] = 0x000000;
-				} 
-				else if ((i + ancho/100 + 1) < getPixeles().length && getPixeles()[i + ancho/100 + 1] == 0xFFFFFF) {
-					getPixeles()[i] = 0xFFFFFF;
-					getPixeles()[i + ancho/100 + 1] = 0x000000;
-				}
-			}
-		}
-	}
-	
-	public int[] getPiexeles() {
-		return getPixeles();
-	}
-	
-	@Override
-	public String toString() {
-		String pixel = "";
-		for (int i:pixeles) {
-			pixel += i + "|";
-		}
-		return "ancho:" + ancho + ",alto:" + alto + ",pixeles:" + pixel + "-";
-	}
-
-	public int[] getPixeles() {
-		return pixeles;
-	}
-
-	public void setPixeles(int[] pixeles) {
-		this.pixeles = pixeles;
-	}
-}
-
-

@@ -10,12 +10,13 @@ import java.net.Socket;
 public class EscucharConexion extends Thread {
 	Socket cliente;
 	ServerSocket servidor;
-	EnviarDatos enviarDatos = new EnviarDatos();
+	EnviarDatos enviarDatos;
 	Juego juego;
 	
-	public EscucharConexion(ServerSocket servidor, Juego juego) {
+	public EscucharConexion(ServerSocket servidor, Juego juego, EnviarDatos enviarDatos) {
 		this.servidor = servidor;
 		this.juego = juego;
+		this.enviarDatos = enviarDatos;
 	}
 	
 	

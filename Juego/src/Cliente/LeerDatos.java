@@ -11,7 +11,6 @@ public class LeerDatos extends Thread{
 	String line;
 	int mapaAncho;
 	int mapaAlto;
-	int[] mapaPixeles;
 	ArrayList<Integer> tanqueId;
 	ArrayList<Integer> tanqueAncho;
 	ArrayList<Integer> tanqueAlto;
@@ -20,8 +19,8 @@ public class LeerDatos extends Thread{
 	ArrayList<Double> anguloCanyon;
 	ArrayList<Integer> bombaAlto;
 	ArrayList<Integer> bombaAncho;
-	ArrayList<Double> bombaX;
-	ArrayList<Double> bombaY;
+	ArrayList<Integer> bombaX;
+	ArrayList<Integer> bombaY;
 	
 	
 	
@@ -51,9 +50,6 @@ public class LeerDatos extends Thread{
 
 	public void asignarDatos(boolean nuevoId) {
 		reestablecerDatos();
-		String mapa = line.substring(0,line.indexOf("-"));
-		line = line.substring(line.indexOf("-")+1);
-		leerMapa(mapa);
 		leerTanques(line);
 		if (nuevoId) {
 			id = tanqueId.get(tanqueId.size()-1);
@@ -63,32 +59,14 @@ public class LeerDatos extends Thread{
 
 	}
 	
-	private void leerMapa(String mapa) {
-		mapaAncho = Integer.parseInt(mapa.substring(6, mapa.indexOf(",")));
-		mapa = mapa.substring(mapa.indexOf(",")+1);
-		mapaAlto = Integer.parseInt(mapa.substring(5, mapa.indexOf(",")));
-		mapa = mapa.substring(mapa.indexOf(",")+1);
-		String mapaPixelesString = mapa.substring(8);
-		mapaPixeles = new int[mapaAncho*mapaAlto/100];
-		int indexPixel = 0;
-		int contador = 0;
-		for (int i = 0; i < mapaPixelesString.length(); i++) {
-			if (mapaPixelesString.charAt(i) == '|') {
-				mapaPixeles[contador] = Integer.parseInt(mapaPixelesString.substring(indexPixel, i));
-				indexPixel = i+1;
-				contador++;
-			}
-		}
-	}
-	
 	private void leerTanques(String tanques) {
 		System.out.println("leerTanques empezar");
 		String tanque;
 		do {
-			tanque= tanques.substring(0, tanques.indexOf("-"));
-			tanques = tanques.substring(tanques.indexOf("-")+1);
+			tanque= tanques.substring(0, tanques.indexOf("|"));
+			tanques = tanques.substring(tanques.indexOf("|")+1);
 			System.out.println(tanques);
-			
+			System.out.println(tanque);
 			tanqueId.add(Integer.parseInt(tanque.substring(3, tanque.indexOf(","))));
 			
 			tanque = tanque.substring(tanque.indexOf(",")+1);
@@ -111,14 +89,13 @@ public class LeerDatos extends Thread{
 			
 			tanque = tanque.substring(tanque.indexOf(",")+1);
 			bombaAncho.add(Integer.parseInt(tanque.substring(11, tanque.indexOf(","))));
-			
+
 			tanque = tanque.substring(tanque.indexOf(",")+1);
-			bombaX.add(Double.parseDouble(tanque.substring(7, tanque.indexOf(","))));
-			
+			bombaX.add((int)Double.parseDouble(tanque.substring(7, tanque.indexOf(","))));
+
 			tanque = tanque.substring(tanque.indexOf(",")+1);
-			bombaY.add(Double.parseDouble(tanque.substring(7)));
+			bombaY.add((int)Double.parseDouble(tanque.substring(7)));
 			
-			System.out.println(tanque);
 		} while (tanques.indexOf(",") != -1);
 	}
 	
@@ -131,8 +108,8 @@ public class LeerDatos extends Thread{
 		anguloCanyon = new ArrayList<Double>();
 		bombaAlto = new ArrayList<Integer>();
 		bombaAncho = new ArrayList<Integer>();
-		bombaX = new ArrayList<Double>();
-		bombaY = new ArrayList<Double>();
+		bombaX = new ArrayList<Integer>();
+		bombaY = new ArrayList<Integer>();
 	}
 	
 }

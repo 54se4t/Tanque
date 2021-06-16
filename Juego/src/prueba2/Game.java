@@ -63,10 +63,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public void run() {
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
-		final double ns = 1000000000.0 / 60.0;
+		final double ns = 1000000000.0 / 6.0;
 		double delta = 0;
 		int frames = 0;
 		int updates = 0;
+		int count = 0;
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -76,6 +77,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 				updates++;
 				delta--;
 				render();//pintar infinito/s
+				System.out.println(count++);
 			}
 			frames++;
 

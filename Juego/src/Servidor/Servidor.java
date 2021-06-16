@@ -12,10 +12,11 @@ public class Servidor {
 	    	Scanner tec = new Scanner(System.in);
 	    	ServerSocket server = new ServerSocket(PORT);
 	    	System.out.println("Server started");  
-	    	Juego juego = new Juego();
-	    	juego.start();
-	    	EscucharConexion ec = new EscucharConexion(server, juego);
+	    	EnviarDatos enviarDatos = new EnviarDatos();
+	    	Juego juego = new Juego(enviarDatos);
+	    	EscucharConexion ec = new EscucharConexion(server, juego, enviarDatos);
 	    	ec.start();
+	    	juego.start();
 	    	System.out.println("Enter to stop server");
 	    	
 	        tec.nextLine();//terminar servidor

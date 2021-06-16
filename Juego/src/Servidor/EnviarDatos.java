@@ -10,12 +10,10 @@ public class EnviarDatos {
 		outputs.add(output);
 	}
 	public void enviarMensaje(Juego juego) {
-		String mensaje;
-		mensaje = juego.mapa.toString();
+		String mensaje = "";
 		for (int i = 0; i < juego.getTanques().size(); i++) {
 			mensaje += juego.getTanques().get(i).toString();
 		}
-		System.out.println(mensaje);
 		for (PrintStream p : outputs)
 			p.println(mensaje);
 	}
