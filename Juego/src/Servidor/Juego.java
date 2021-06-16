@@ -40,6 +40,7 @@ public class Juego extends Thread implements Serializable{
 		Tanque tq = new Tanque();
 		tq.setY(304);
 		tq.setX(100);
+		tq.setXYbomba();
 		tanques.add(tq);
 	}
 
@@ -48,84 +49,3 @@ public class Juego extends Thread implements Serializable{
 	}
 }
 
-class ObjetoJuego implements Serializable{
-	protected double x;
-	protected double y;
-	protected int ancho;
-	protected int alto;
-	
-	public int getX() {
-		return (int)x;
-	}
-	public void setX(double x) { 
-		this.x = x;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-	
-	public int getY() {
-		return (int)y;
-	}
-	public void setY(double y) { 
-		this.y = y;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-	public int getAncho() {
-		return ancho;
-	}
-	public int getAlto() {
-		return alto;
-	}
-		
-}
-
-
-
-class Bomba extends ObjetoJuego implements Serializable{
-	private boolean volando = false;
-	private double velocidadVolar;
-	private double velocidadCaer;
-	private double anguloVolar;
-	
-	public Bomba() {
-		ancho = 30;
-		alto = 30;
-	}
-	
-	public double getAnguloVolar() {
-		return anguloVolar;
-	}
-
-	public void setAnguloVolar(double anguloVolar) {
-		this.anguloVolar = anguloVolar;
-	}
-
-	public void volar() {
-		if (volando)
-			volando = false;
-		else
-			volando = true;
-	}
-	
-	public void mover() {
-		if (volando == true) {
-			if (anguloVolar <= 9) {
-				x = x + 2*velocidadVolar - velocidadVolar * anguloVolar / 4.5;
-				y = y - velocidadVolar * anguloVolar / 4.5 + velocidadCaer;
-			} else if (anguloVolar <= 18) {
-				x = x - 2*velocidadVolar + velocidadVolar * (18-anguloVolar) / 4.5;
-				y = y - velocidadVolar * (18-anguloVolar) / 4.5 + velocidadCaer;
-			}
-			velocidadCaer += velocidadCaer/10;
-			if (velocidadVolar >= 0)
-				velocidadVolar -= velocidadVolar/100;
-		}
-		else {
-			velocidadCaer = 0.1;
-			velocidadVolar = 10;
-		}
-	}
-}

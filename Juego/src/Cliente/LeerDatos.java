@@ -60,13 +60,11 @@ public class LeerDatos extends Thread{
 	}
 	
 	private void leerTanques(String tanques) {
-		System.out.println("leerTanques empezar");
 		String tanque;
 		do {
 			tanque= tanques.substring(0, tanques.indexOf("|"));
 			tanques = tanques.substring(tanques.indexOf("|")+1);
-			System.out.println(tanques);
-			System.out.println(tanque);
+			
 			tanqueId.add(Integer.parseInt(tanque.substring(3, tanque.indexOf(","))));
 			
 			tanque = tanque.substring(tanque.indexOf(",")+1);
@@ -111,5 +109,4 @@ public class LeerDatos extends Thread{
 		bombaX = new ArrayList<Integer>();
 		bombaY = new ArrayList<Integer>();
 	}
-	
 }
