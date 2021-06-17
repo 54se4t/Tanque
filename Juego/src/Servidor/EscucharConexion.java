@@ -20,7 +20,7 @@ public class EscucharConexion extends Thread {
 	}
 	
 	
-	// Aceptar el cliente y crea un nuevo tanque para el cliente y envia su ID
+	// Aceptar el cliente y crea un nuevo tanque para el cliente
 	public void run() {
 		while (true) {
 			try {

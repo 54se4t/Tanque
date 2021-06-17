@@ -12,6 +12,7 @@ public class Servidor {
 	    	Scanner tec = new Scanner(System.in);
 	    	ServerSocket server = new ServerSocket(PORT);
 	    	System.out.println("Server started");  
+	    	Sala s = new Sala();
 	    	EnviarDatos enviarDatos = new EnviarDatos();
 	    	Juego juego = new Juego(enviarDatos);
 	    	EscucharConexion ec = new EscucharConexion(server, juego, enviarDatos);

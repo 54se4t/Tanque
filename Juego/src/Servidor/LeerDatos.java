@@ -24,27 +24,21 @@ public class LeerDatos extends Thread{
 				//System.out.println(idTanque);
 				//juego.tanques.get(idTanque).moverDerecha();
 //				juego.tanques.get(idTanque).y += 100;
-				System.out.println(line);
 				switch (mensaje) {
 					case "moverDerecha" :
 						juego.tanques.get(idTanque).moverDerecha();
-						System.out.println("id:" + idTanque + ",moverDerecha");
 						break;
 					case "moverIzquierda" :
 						juego.tanques.get(idTanque).moverIzquierda();
-						System.out.println("id:" + idTanque + ",moverIzquierda");
 						break;
 					case "subirCanyon" :
 						juego.tanques.get(idTanque).subirCanyon();
-						System.out.println("id:" + idTanque + ",subirCanyon");
 						break;
 					case "bajarCanyon" :
 						juego.tanques.get(idTanque).bajarCanyon();
-						System.out.println("id:" + idTanque + ",bajarCanyon");
 						break;
 					case "disparar" :
 						juego.tanques.get(idTanque).disparar();
-						System.out.println("id:" + idTanque + ",disparar");
 						break;
 				}
 
@@ -55,6 +49,7 @@ public class LeerDatos extends Thread{
 				// TODO Auto-generated catch block
 				System.out.println(e);
 				System.out.println("LeerDatos");
+				break;
 			}
 			
 		}

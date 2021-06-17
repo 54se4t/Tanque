@@ -89,23 +89,23 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
 		final double ns = 1000000000.0 / 60.0;
-		final double ns2 = 1000000000.0 / 60.0;
-		double delta = 0, delta2 = 0;
+		final double actFondo = 1000000000.0 / 120.0;
+		double delta = 0, deltaFondo = 0;
 		int frames = 0;
 		int updates = 0;
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
-			delta2 += (now - lastTime) / ns2;
+			deltaFondo += (now - lastTime) / actFondo;
 			lastTime = now;
 			while (delta >= 1) {
 				updates++;
 				delta--;
 				render();
-				if (delta2 > 1) {
+				if (deltaFondo > 1) {
 					fondo.borrar();
 					fondo.pintar();
-					delta2--;
+					deltaFondo--;
 				}
 			}
 		
@@ -148,8 +148,8 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		g.drawImage(arbolEspejo,822,(int)(getHeight()*fondo.TIERRA), 40, 70 ,null);
 		g.drawImage(arbolEspejo,852,(int)(getHeight()*fondo.TIERRA), 90, 157 ,null);
 		
-		g.drawImage(regalo,-200,(int)(getHeight()*fondo.TIERRA-163), 400, 163 ,null);
-		g.drawImage(regaloEspejo,-190,(int)(getHeight()*fondo.TIERRA), 400, 163 ,null);
+		/*g.drawImage(regalo,-200,(int)(getHeight()*fondo.TIERRA-163), 400, 163 ,null);
+		g.drawImage(regaloEspejo,-190,(int)(getHeight()*fondo.TIERRA), 400, 163 ,null);*/
 		
 		
 		//g.setColor(Color.WHITE);
