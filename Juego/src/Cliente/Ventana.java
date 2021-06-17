@@ -184,10 +184,12 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 			g.fillRoundRect(tanqueX+5, tanqueY, 40, 50, 40, 40);
 			g.setColor(new Color(185,203,214));
 			g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int) (getHeight()*fondo.TIERRA), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
-						
+			
 			g.setColor(Color.black);
 			//cuerpo de tanque
 			g.fillRect(tanqueX, tanqueY, leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
+			g.setColor(Color.green);
+			g.fillRect(tanqueX - leerdatos.vida.get(i)/2, tanqueY+60, leerdatos.vida.get(i), 5);
 			} catch (IndexOutOfBoundsException e) {
 				// TODO: handle exception
 			}

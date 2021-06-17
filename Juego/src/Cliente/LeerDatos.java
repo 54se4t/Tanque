@@ -21,7 +21,8 @@ public class LeerDatos extends Thread{
 	ArrayList<Integer> bombaAncho;
 	ArrayList<Integer> bombaX;
 	ArrayList<Integer> bombaY;
-	
+	ArrayList<Integer> vida;
+
 	
 	
 	public LeerDatos(BufferedReader leerDatos) {
@@ -92,7 +93,10 @@ public class LeerDatos extends Thread{
 			bombaX.add((int)Double.parseDouble(tanque.substring(7, tanque.indexOf(","))));
 
 			tanque = tanque.substring(tanque.indexOf(",")+1);
-			bombaY.add((int)Double.parseDouble(tanque.substring(7)));
+			bombaY.add((int)Double.parseDouble(tanque.substring(7, tanque.indexOf(","))));
+			
+			tanque = tanque.substring(tanque.indexOf(",")+1);
+			vida.add((int)Double.parseDouble(tanque.substring(5)));
 			
 		} while (tanques.indexOf(",") != -1);
 	}
@@ -108,5 +112,6 @@ public class LeerDatos extends Thread{
 		bombaAncho = new ArrayList<Integer>();
 		bombaX = new ArrayList<Integer>();
 		bombaY = new ArrayList<Integer>();
+		vida = new ArrayList<Integer>();
 	}
 }

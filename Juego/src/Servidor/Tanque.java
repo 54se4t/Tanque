@@ -93,6 +93,7 @@ public class Tanque extends ObjetoJuego implements Serializable{
 	private int id;
 	private double anguloCanyon = 3;
 	private Bomba bomba = new Bomba();
+	private int vida = 100;
 	
 	public Tanque() {
 		id = contador;
@@ -149,8 +150,19 @@ public class Tanque extends ObjetoJuego implements Serializable{
 		System.out.println(y);
 	}
 	
+	public void recibirDanyo(int x) {
+		double distancia;
+		if ((this.x - x) > 0)
+			distancia = this.x - x;
+		else
+			distancia = x - this.x;
+		if (distancia < ancho) {
+			vida -= 10;
+		}
+	}
+	
 	@Override
 	public String toString() {
-		return "id:" + id + ",ancho:" + ancho + ",alto:" + alto + ",x:" + x + ",y:" + y + ",anguloCanyon:" + anguloCanyon + ",bombaAlto:" + bomba.alto + ",bombaAncho:" + bomba.ancho + ",bombaX:" + Math.round(bomba.x) + ",bombaY:" + Math.round(bomba.y) + "|";
+		return "id:" + id + ",ancho:" + ancho + ",alto:" + alto + ",x:" + x + ",y:" + y + ",anguloCanyon:" + anguloCanyon + ",bombaAlto:" + bomba.alto + ",bombaAncho:" + bomba.ancho + ",bombaX:" + Math.round(bomba.x) + ",bombaY:" + Math.round(bomba.y) + ",vida:" + vida + "|";
 	}
 }
