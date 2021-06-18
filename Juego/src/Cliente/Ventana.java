@@ -158,38 +158,44 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 			try {
 			int tanqueX = (int)(leerdatos.tanqueX.get(i)+0);
 			int tanqueY = (int) (getHeight()*fondo.TIERRA) - leerdatos.tanqueAlto.get(i);
-			
-			g.setColor(Color.black);//cañon de tanque
-			Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
-			g2.setColor(Color.BLACK);
-			g2.rotate(-Math.PI/18*leerdatos.anguloCanyon.get(i), tanqueX + leerdatos.tanqueAncho.get(i)/2, tanqueY);
-			g2.fillRect( tanqueX + leerdatos.tanqueAncho.get(i)/2 - 5 , tanqueY - 5, 30, 10);
-			g2.dispose();	
-			
-			Graphics2D g3 = (Graphics2D) bs.getDrawGraphics();
-			g3.setColor(new Color(185,203,214));
-			g3.rotate(+Math.PI/18*leerdatos.anguloCanyon.get(i), tanqueX + leerdatos.tanqueAncho.get(i)/2, tanqueY + leerdatos.tanqueAlto.get(i)*2);
-			g3.fillRect( tanqueX + leerdatos.tanqueAncho.get(i)/2 - 5 , tanqueY + leerdatos.tanqueAlto.get(i)*2 - 5, 30, 10);
-			g3.dispose();
-			
-			g.setColor(new Color(255,0,0));//Bomba
-			g.fillRoundRect(leerdatos.bombaX.get(i), leerdatos.bombaY.get(i), leerdatos.bombaAlto.get(i), leerdatos.bombaAncho.get(i), 50, 50);
-			g.setColor(new Color(255,130,130));
-			g.fillRoundRect(leerdatos.bombaX.get(i), -leerdatos.bombaY.get(i) + 620, leerdatos.bombaAlto.get(i), leerdatos.bombaAncho.get(i), 50, 50);
-			
-			g.setColor(new Color(34,90,120));//capa de tanque
-			g.fillRoundRect(tanqueX+5, tanqueY-10, 40, 50, 40, 40);
-			//Espejo de tanque
-			g.setColor(new Color(204,222,233));
-			g.fillRoundRect(tanqueX+5, tanqueY, 40, 50, 40, 40);
-			g.setColor(new Color(185,203,214));
-			g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int) (getHeight()*fondo.TIERRA), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
-			
-			g.setColor(Color.black);
-			//cuerpo de tanque
-			g.fillRect(tanqueX, tanqueY, leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
-			g.setColor(Color.green);
-			g.fillRect(tanqueX - leerdatos.vida.get(i)/2, tanqueY+60, leerdatos.vida.get(i), 5);
+				if (leerdatos.vida.get(i) <= 0) {
+					if (leerdatos.id == leerdatos.tanqueId.get(i))
+						g.drawString("Has perdido", 50, 50);
+				} else {
+					g.setColor(Color.black);//cañon de tanque
+					Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
+					g2.setColor(Color.BLACK);
+					g2.rotate(-Math.PI/18*leerdatos.anguloCanyon.get(i), tanqueX + leerdatos.tanqueAncho.get(i)/2, tanqueY);
+					g2.fillRect( tanqueX + leerdatos.tanqueAncho.get(i)/2 - 5 , tanqueY - 5, 30, 10);
+					g2.dispose();	
+					
+					Graphics2D g3 = (Graphics2D) bs.getDrawGraphics();
+					g3.setColor(new Color(185,203,214));
+					g3.rotate(+Math.PI/18*leerdatos.anguloCanyon.get(i), tanqueX + leerdatos.tanqueAncho.get(i)/2, tanqueY + leerdatos.tanqueAlto.get(i)*2);
+					g3.fillRect( tanqueX + leerdatos.tanqueAncho.get(i)/2 - 5 , tanqueY + leerdatos.tanqueAlto.get(i)*2 - 5, 30, 10);
+					g3.dispose();
+					
+					g.setColor(new Color(255,0,0));//Bomba
+					g.fillRoundRect(leerdatos.bombaX.get(i), leerdatos.bombaY.get(i), leerdatos.bombaAlto.get(i), leerdatos.bombaAncho.get(i), 50, 50);
+					g.setColor(new Color(255,130,130));
+					g.fillRoundRect(leerdatos.bombaX.get(i), -leerdatos.bombaY.get(i) + 620, leerdatos.bombaAlto.get(i), leerdatos.bombaAncho.get(i), 50, 50);
+					
+					g.setColor(new Color(34,90,120));//capa de tanque
+					g.fillRoundRect(tanqueX+5, tanqueY-10, 40, 50, 40, 40);
+					//Espejo de tanque
+					g.setColor(new Color(204,222,233));
+					g.fillRoundRect(tanqueX+5, tanqueY, 40, 50, 40, 40);
+					g.setColor(new Color(185,203,214));
+					g.fillRect((int)(leerdatos.tanqueX.get(i)+0), (int) (getHeight()*fondo.TIERRA), leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
+					
+					g.setColor(Color.black);
+					//cuerpo de tanque
+					g.fillRect(tanqueX, tanqueY, leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
+					g.setColor(Color.green);
+					g.fillRect(tanqueX, tanqueY+60, leerdatos.vida.get(i), 5);
+					g.setColor(Color.red);
+					g.fillRect(tanqueX + leerdatos.vida.get(i), tanqueY+60, 50 - leerdatos.vida.get(i), 5);
+				}
 			} catch (IndexOutOfBoundsException e) {
 				// TODO: handle exception
 			}

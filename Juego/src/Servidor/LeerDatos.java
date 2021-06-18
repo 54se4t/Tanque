@@ -7,11 +7,13 @@ public class LeerDatos extends Thread{
 	private BufferedReader leerDatos = null;
 	EnviarDatos enviarDatos = null;
 	Juego juego = null;
+	int id;
 	public LeerDatos(BufferedReader leerDatos, EnviarDatos enviarDatos, Juego juego) {
 		this.leerDatos = leerDatos;
 		this.enviarDatos = enviarDatos;
 		this.juego = juego;
 		enviarDatos.enviarMensaje(juego);
+		id = juego.tanques.get(juego.tanques.size()-1).getId();
 	}
 	public void run() {
 		String line = null;
@@ -46,9 +48,12 @@ public class LeerDatos extends Thread{
 				enviarDatos.enviarMensaje(juego);
 				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println(e);
-				System.out.println("LeerDatos");
+				//Eliminar juegador desconectado
+				for (int i = 0; i < juego.tanques.size(); i++) 
+					if (id == juego.tanques.get(i).getId()) {
+						juego.tanques.get(i).setVida(0);;
+						System.out.println("Jugador " + i + " ha abandonado la partida");
+					}
 				break;
 			}
 			

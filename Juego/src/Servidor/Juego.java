@@ -24,9 +24,10 @@ public class Juego extends Thread implements Serializable{
 			while (delta >= 1) {
 				for (Tanque t : tanques) {
 					t.getBomba().mover();
-					if (t.getBomba().x < 0 || t.getBomba().x > 960 || t.getBomba().y > 350) {
-						t.setXYbomba();
-						t.getBomba().volar();
+					if (t.getBomba().x < 0 || t.getBomba().x > 960 || t.getBomba().y > 340) {
+						for (Tanque t2 : tanques)
+							t2.recibirDanyo(t.getBomba().getX());
+						t.recargar();
 					}
 				}
 				enviarDatos.enviarMensaje(this);
