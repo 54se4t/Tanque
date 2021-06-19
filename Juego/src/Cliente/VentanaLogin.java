@@ -1,18 +1,25 @@
 package Cliente;
 
 import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -25,8 +32,8 @@ public class VentanaLogin extends JFrame {
 	
 	private final static int PORT = 5004;
 	private final static String SERVER = "127.0.0.1";
-	private static PrintStream output;
-	private static Socket socket;
+	public static PrintStream output;
+	public static Socket socket;
 	
 	private JPanel contentPane;
 	private JTextField textUsuario;
@@ -39,8 +46,6 @@ public class VentanaLogin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					socket = new Socket(SERVER, PORT);
-					output = new PrintStream(socket.getOutputStream());
 					VentanaLogin frame = new VentanaLogin();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -54,6 +59,17 @@ public class VentanaLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaLogin() {
+		try {
+			socket = new Socket(SERVER, PORT);
+			output = new PrintStream(socket.getOutputStream());
+			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -91,7 +107,7 @@ public class VentanaLogin extends JFrame {
 		JButton btnCrearUsuario = new JButton("Crear cuenta");
 		btnCrearUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				output.println("crear-usuario:" + textUsuario + ",contrasenya:" + textConstrasenya);
+				output.println("crear-usuario:" + textUsuario.getText() + ",contrasenya:" + textConstrasenya.getText());
 			}
 		});
 		GridBagConstraints gbc_btnCrearUsuario = new GridBagConstraints();
@@ -103,7 +119,7 @@ public class VentanaLogin extends JFrame {
 		JButton btnLogin = new JButton("Entrar");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				output.println("entrar-usuario:" + textUsuario + ",contrasenya:" + textConstrasenya);
+				output.println("entrar-usuario:" + textUsuario.getText() + ",contrasenya:" + textConstrasenya.getText());
 			}
 		});
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
@@ -111,16 +127,6 @@ public class VentanaLogin extends JFrame {
 		gbc_btnLogin.gridx = 1;
 		gbc_btnLogin.gridy = 2;
 		contentPane.add(btnLogin, gbc_btnLogin);
-		
-		Canvas canvas = new Canvas();
-		canvas.setBackground(Color.WHITE);
-		GridBagConstraints gbc_canvas = new GridBagConstraints();
-		gbc_canvas.gridwidth = 2;
-		gbc_canvas.fill = GridBagConstraints.VERTICAL;
-		gbc_canvas.insets = new Insets(0, 0, 0, 5);
-		gbc_canvas.gridx = 0;
-		gbc_canvas.gridy = 3;
-		contentPane.add(canvas, gbc_canvas);
 	}
 
 }
