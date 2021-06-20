@@ -168,7 +168,7 @@ class EnviarDatosSala {
 	public void enviarMensajePreparado() {
 		String mensaje = "preparar-";
 		for (int i = 0; i < usuario.size(); i++)
-			mensaje += ("[" + usuario.get(i) + "]Preparado:" + preparado.get(i));
+			mensaje += ("[" + usuario.get(i) + "]Preparado:" + preparado.get(i) + "|");
 		System.out.println(mensaje);
 		for (PrintStream p : outputs)
 			p.println(mensaje);

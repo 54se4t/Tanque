@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JButton;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintStream;
@@ -46,6 +47,8 @@ public class VentanaSala extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaSala(Socket socket, PrintStream output) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/arbol.png"));
+		setTitle("Tanque-Sala");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -67,12 +70,15 @@ public class VentanaSala extends JFrame {
 		gbc_panel.gridy = 0;
 		contentPane.add(panel, gbc_panel);
 		panel.setLayout(new BorderLayout(0, 0));
+		textChat.setEditable(false);
+		
 		
 		textChat.setLineWrap(true);
 		panel.add(textChat, BorderLayout.CENTER);
 		
 		JScrollBar scrollBar = new JScrollBar();
 		panel.add(scrollBar, BorderLayout.EAST);
+		textLista.setEditable(false);
 		
 		textLista.setLineWrap(true);
 		GridBagConstraints gbc_textLista = new GridBagConstraints();

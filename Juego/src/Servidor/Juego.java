@@ -24,9 +24,11 @@ public class Juego extends Thread implements Serializable{
 			while (delta >= 1) {
 				for (Tanque t : tanques) {
 					t.getBomba().mover();
-					if (t.getBomba().x < 0 || t.getBomba().x > 960 || t.getBomba().y > 340) {
-						for (Tanque t2 : tanques)
+					if (t.getBomba().y > 304) {
+						for (Tanque t2 : tanques) {
 							t2.recibirDanyo(t.getBomba().getX());
+						}
+						ckPartida();
 						t.recargar();
 					}
 				}
@@ -34,19 +36,35 @@ public class Juego extends Thread implements Serializable{
 				delta--;
 			}
 		}
-		System.out.println("terminado");
 	}
 	
 	public void anyadirTanque() {
 		Tanque tq = new Tanque();
 		tq.setY(304);
-		tq.setX(100);
+		tq.setXAleatoria();
 		tq.setXYbomba();
 		tanques.add(tq);
 	}
 
 	public ArrayList<Tanque> getTanques() {
 		return tanques;
+	}
+	
+	public void ckPartida() {
+		int total = tanques.size();
+		int muertos = 0;
+		for (Tanque t : tanques)
+			if (t.getVida() <= 0) muertos++;
+		if ((total-muertos) == 1)
+			reempezarPartida();
+	}
+	public void reempezarPartida() {
+		System.out.println("reempezarPartida");
+		for (Tanque t : tanques) {
+			t.setXAleatoria();
+			t.setXYbomba();
+			t.setVida(50);
+		}
 	}
 }
 

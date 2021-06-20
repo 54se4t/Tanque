@@ -4,7 +4,7 @@ import java.net.ServerSocket;
 import java.util.Scanner;
 
 
-public class Servidor {
+public class EmpezarServidor {
     private final static int PORT = 5003;
    
 	public static void main(String[] args) {

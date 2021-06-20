@@ -1,6 +1,7 @@
 package prueba2;
 
 import java.awt.Canvas;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -63,7 +64,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public void run() {
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
-		final double ns = 1000000000.0 / 6.0;
+		final double ns = 1000000000.0 / 30.0;
 		double delta = 0;
 		int frames = 0;
 		int updates = 0;

@@ -8,15 +8,20 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class LeerDatosSala extends Thread{
+	private final static int PORT = 5003;
+	private final static String SERVER = "127.0.0.1";
 	BufferedReader leerDatos;
 	VentanaSala sala;
 	VentanaLogin login = new VentanaLogin();
+	boolean juegoEmpezado = false;
 	public LeerDatosSala() {
 		try {
 			leerDatos = new BufferedReader(new InputStreamReader(login.socket.getInputStream()));
 			this.leerDatos = leerDatos;
 			login.setVisible(true);
 			sala = new VentanaSala(login.socket, login.output);
+			sala.setLocationRelativeTo(null);
+			login.setLocationRelativeTo(null);
 			this.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -56,6 +61,7 @@ public class LeerDatosSala extends Thread{
 						switch (evento) {
 						case "preparar":
 							line = line.substring(line.indexOf("-")+1);
+							line = line.replace("|", "\n");
 							sala.textLista.setText(line);
 							continue bucle;
 						case "ERROR":
@@ -64,9 +70,11 @@ public class LeerDatosSala extends Thread{
 							JOptionPane.showInternalMessageDialog(null, error, "ERROR", JOptionPane.ERROR_MESSAGE);
 							continue bucle;
 						case "empezar":
-							System.out.println("Empezar");
-							Ventana v = new Ventana();
-							v.main(null);
+							if (!juegoEmpezado) {
+								Ventana v = new Ventana();
+								v.main(null);
+								juegoEmpezado = true;
+							}
 							continue bucle;
 						}
 					} 

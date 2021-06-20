@@ -27,6 +27,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import java.awt.Toolkit;
 
 public class VentanaLogin extends JFrame {
 	
@@ -38,6 +40,8 @@ public class VentanaLogin extends JFrame {
 	private JPanel contentPane;
 	private JTextField textUsuario;
 	private JTextField textConstrasenya;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_1;
 
 	/**
 	 * Launch the application.
@@ -59,6 +63,8 @@ public class VentanaLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaLogin() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/arbol.png"));
+		setTitle("Tanque-Iniciar sesi\u00F3n");
 		try {
 			socket = new Socket(SERVER, PORT);
 			output = new PrintStream(socket.getOutputStream());
@@ -71,36 +77,50 @@ public class VentanaLogin extends JFrame {
 			e.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 199);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
+		
+		lblNewLabel = new JLabel("Usuario:");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 1;
+		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
 		textUsuario = new JTextField();
 		textUsuario.setToolTipText("Introduce tu usuario");
 		GridBagConstraints gbc_textUsuario = new GridBagConstraints();
 		gbc_textUsuario.gridwidth = 2;
-		gbc_textUsuario.insets = new Insets(0, 0, 5, 0);
+		gbc_textUsuario.insets = new Insets(0, 0, 5, 5);
 		gbc_textUsuario.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textUsuario.gridx = 0;
-		gbc_textUsuario.gridy = 0;
+		gbc_textUsuario.gridx = 1;
+		gbc_textUsuario.gridy = 1;
 		contentPane.add(textUsuario, gbc_textUsuario);
 		textUsuario.setColumns(10);
+		
+		lblNewLabel_1 = new JLabel("Contrase\u00F1a:");
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_1.gridx = 0;
+		gbc_lblNewLabel_1.gridy = 2;
+		contentPane.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
 		textConstrasenya = new JTextField();
 		textConstrasenya.setToolTipText("Introduce tu contrase\u00F1a");
 		GridBagConstraints gbc_textConstrasenya = new GridBagConstraints();
 		gbc_textConstrasenya.gridwidth = 2;
-		gbc_textConstrasenya.insets = new Insets(0, 0, 5, 0);
+		gbc_textConstrasenya.insets = new Insets(0, 0, 5, 5);
 		gbc_textConstrasenya.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textConstrasenya.gridx = 0;
-		gbc_textConstrasenya.gridy = 1;
+		gbc_textConstrasenya.gridx = 1;
+		gbc_textConstrasenya.gridy = 2;
 		contentPane.add(textConstrasenya, gbc_textConstrasenya);
 		textConstrasenya.setColumns(10);
 		
@@ -112,8 +132,8 @@ public class VentanaLogin extends JFrame {
 		});
 		GridBagConstraints gbc_btnCrearUsuario = new GridBagConstraints();
 		gbc_btnCrearUsuario.insets = new Insets(0, 0, 5, 5);
-		gbc_btnCrearUsuario.gridx = 0;
-		gbc_btnCrearUsuario.gridy = 2;
+		gbc_btnCrearUsuario.gridx = 1;
+		gbc_btnCrearUsuario.gridy = 3;
 		contentPane.add(btnCrearUsuario, gbc_btnCrearUsuario);
 		
 		JButton btnLogin = new JButton("Entrar");
@@ -124,8 +144,8 @@ public class VentanaLogin extends JFrame {
 		});
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.insets = new Insets(0, 0, 5, 0);
-		gbc_btnLogin.gridx = 1;
-		gbc_btnLogin.gridy = 2;
+		gbc_btnLogin.gridx = 2;
+		gbc_btnLogin.gridy = 3;
 		contentPane.add(btnLogin, gbc_btnLogin);
 	}
 

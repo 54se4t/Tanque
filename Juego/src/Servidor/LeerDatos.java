@@ -51,7 +51,7 @@ public class LeerDatos extends Thread{
 				//Eliminar juegador desconectado
 				for (int i = 0; i < juego.tanques.size(); i++) 
 					if (id == juego.tanques.get(i).getId()) {
-						juego.tanques.get(i).setVida(0);;
+						juego.tanques.get(i).setVida(-100);
 						System.out.println("Jugador " + i + " ha abandonado la partida");
 					}
 				break;

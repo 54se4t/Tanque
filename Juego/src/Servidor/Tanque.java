@@ -102,6 +102,10 @@ public class Tanque extends ObjetoJuego implements Serializable{
 		alto = 20;
 	}
 	
+	public void setXAleatoria() {
+		x = Math.random()*(960-ancho);
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -111,12 +115,14 @@ public class Tanque extends ObjetoJuego implements Serializable{
 	}
 
 	public void moverDerecha() {
-		x -= VELOCIDAD_MOVER;
+		if (x > 0)
+			x -= VELOCIDAD_MOVER;
 		if (!bomba.isVolando()) 
 			setXYbomba();
 	}
 	public void moverIzquierda() {
-		x += VELOCIDAD_MOVER;
+		if (x < 960-ancho)
+			x += VELOCIDAD_MOVER;
 		if (!bomba.isVolando()) 
 			setXYbomba();
 	}
@@ -155,9 +161,8 @@ public class Tanque extends ObjetoJuego implements Serializable{
 		double distancia = this.x - x;
 		distancia = Math.sqrt(Math.pow(distancia, 2));
 		System.out.println("dis:" + distancia);
-		if (distancia < ancho && vida > 0) {
+		if (distancia < ancho && vida > 0)
 			vida -= 10;
-		}
 	}
 	
 	public int getVida() {

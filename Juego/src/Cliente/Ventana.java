@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
@@ -91,15 +92,12 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		final double ns = 1000000000.0 / 60.0;
 		final double actFondo = 1000000000.0 / 120.0;
 		double delta = 0, deltaFondo = 0;
-		int frames = 0;
-		int updates = 0;
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			deltaFondo += (now - lastTime) / actFondo;
 			lastTime = now;
 			while (delta >= 1) {
-				updates++;
 				delta--;
 				render();
 				if (deltaFondo > 1) {
@@ -108,15 +106,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 					deltaFondo--;
 				}
 			}
-		
-			frames++;
 
-			if (System.currentTimeMillis() - timer > 1000) {
-				timer += 1000;
-				frame.setTitle(frames + " fps");
-				updates = 0;
-				frames = 0;
-			}
 		}
 		stop();
 	}
@@ -159,8 +149,10 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 			int tanqueX = (int)(leerdatos.tanqueX.get(i)+0);
 			int tanqueY = (int) (getHeight()*fondo.TIERRA) - leerdatos.tanqueAlto.get(i);
 				if (leerdatos.vida.get(i) <= 0) {
-					if (leerdatos.id == leerdatos.tanqueId.get(i))
-						g.drawString("Has perdido", 50, 50);
+					if (leerdatos.id == leerdatos.tanqueId.get(i)) {
+						g.setColor(Color.red);
+						g.drawString("Has perdido!!", 100, 100);
+					}
 				} else {
 					g.setColor(Color.black);//cañon de tanque
 					Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
@@ -191,9 +183,12 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 					g.setColor(Color.black);
 					//cuerpo de tanque
 					g.fillRect(tanqueX, tanqueY, leerdatos.tanqueAncho.get(i), leerdatos.tanqueAlto.get(i));
-					g.setColor(Color.green);
+					if (id == leerdatos.tanqueId.get(i))
+						g.setColor(Color.green);
+					else
+						g.setColor(Color.red);
 					g.fillRect(tanqueX, tanqueY+60, leerdatos.vida.get(i), 5);
-					g.setColor(Color.red);
+					g.setColor(Color.black);
 					g.fillRect(tanqueX + leerdatos.vida.get(i), tanqueY+60, 50 - leerdatos.vida.get(i), 5);
 				}
 			} catch (IndexOutOfBoundsException e) {
@@ -223,6 +218,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		Ventana ventana = new Ventana();
 		ventana.addKeyListener(ventana);
 		ventana.frame.setResizable(false);
+		ventana.frame.setIconImage(Toolkit.getDefaultToolkit().getImage("img/arbol.png"));
 		ventana.frame.setTitle("Tank");
 		ventana.frame.add(ventana);
 		ventana.frame.pack(); // Cambiar tamaÃ±o automatico por los objetos dentro de la ventana
