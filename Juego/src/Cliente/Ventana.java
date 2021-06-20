@@ -150,7 +150,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 					g2.fillRect( tanqueX + leerdatos.tanqueAncho.get(i)/2 - 5 , tanqueY - 5, 30, 10);
 					g2.dispose();	
 					
-					Graphics2D g3 = (Graphics2D) bs.getDrawGraphics();
+					Graphics2D g3 = (Graphics2D) bs.getDrawGraphics(); //espejo de cañon
 					g3.setColor(new Color(185,203,214));
 					g3.rotate(+Math.PI/18*leerdatos.anguloCanyon.get(i), tanqueX + leerdatos.tanqueAncho.get(i)/2, tanqueY + leerdatos.tanqueAlto.get(i)*2);
 					g3.fillRect( tanqueX + leerdatos.tanqueAncho.get(i)/2 - 5 , tanqueY + leerdatos.tanqueAlto.get(i)*2 - 5, 30, 10);
