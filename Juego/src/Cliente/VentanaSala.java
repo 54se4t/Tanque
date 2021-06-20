@@ -19,6 +19,7 @@ import java.net.Socket;
 import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
 import javax.swing.JTextField;
+import java.awt.ScrollPane;
 
 public class VentanaSala extends JFrame {
 
@@ -26,6 +27,7 @@ public class VentanaSala extends JFrame {
 	JTextField textMensaje;
 	JTextArea textLista = new JTextArea();
 	JTextArea textChat = new JTextArea();
+	ScrollPane scrollPane = new ScrollPane();
 
 	/**
 	 * Launch the application.
@@ -70,14 +72,14 @@ public class VentanaSala extends JFrame {
 		gbc_panel.gridy = 0;
 		contentPane.add(panel, gbc_panel);
 		panel.setLayout(new BorderLayout(0, 0));
+
+		panel.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.add(textChat);
 		textChat.setEditable(false);
 		
 		
 		textChat.setLineWrap(true);
-		panel.add(textChat, BorderLayout.CENTER);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		panel.add(scrollBar, BorderLayout.EAST);
+		//panel.add(textChat, BorderLayout.CENTER);
 		textLista.setEditable(false);
 		
 		textLista.setLineWrap(true);

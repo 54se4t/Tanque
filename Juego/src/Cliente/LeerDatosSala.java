@@ -79,8 +79,10 @@ public class LeerDatosSala extends Thread{
 						}
 					} 
 				} 
-				else
+				else {
 					sala.textChat.setText(sala.textChat.getText() + line + "\n");
+					sala.scrollPane.setScrollPosition(sala.scrollPane.getHAdjustable().getMinimum(),sala.scrollPane.getVAdjustable().getMaximum()+500);
+				}
 			} catch (IOException e) {
 				JOptionPane.showInternalMessageDialog(null, e, "ERROR", JOptionPane.ERROR_MESSAGE);
 			}

@@ -7,6 +7,7 @@ import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 
@@ -39,7 +40,7 @@ public class VentanaLogin extends JFrame {
 	
 	private JPanel contentPane;
 	private JTextField textUsuario;
-	private JTextField textConstrasenya;
+	private JTextField textContrasenya;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
 
@@ -113,21 +114,21 @@ public class VentanaLogin extends JFrame {
 		gbc_lblNewLabel_1.gridy = 2;
 		contentPane.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
-		textConstrasenya = new JTextField();
-		textConstrasenya.setToolTipText("Introduce tu contrase\u00F1a");
-		GridBagConstraints gbc_textConstrasenya = new GridBagConstraints();
-		gbc_textConstrasenya.gridwidth = 2;
-		gbc_textConstrasenya.insets = new Insets(0, 0, 5, 5);
-		gbc_textConstrasenya.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textConstrasenya.gridx = 1;
-		gbc_textConstrasenya.gridy = 2;
-		contentPane.add(textConstrasenya, gbc_textConstrasenya);
-		textConstrasenya.setColumns(10);
+		textContrasenya = new JPasswordField();
+		textContrasenya.setToolTipText("Introduce tu contrase\u00F1a");
+		GridBagConstraints gbc_textContrasenya = new GridBagConstraints();
+		gbc_textContrasenya.gridwidth = 2;
+		gbc_textContrasenya.insets = new Insets(0, 0, 5, 5);
+		gbc_textContrasenya.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textContrasenya.gridx = 1;
+		gbc_textContrasenya.gridy = 2;
+		contentPane.add(textContrasenya, gbc_textContrasenya);
+		textContrasenya.setColumns(10);
 		
 		JButton btnCrearUsuario = new JButton("Crear cuenta");
 		btnCrearUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				output.println("crear-usuario:" + textUsuario.getText() + ",contrasenya:" + textConstrasenya.getText());
+				output.println("crear-usuario:" + textUsuario.getText() + ",contrasenya:" + textContrasenya.getText());
 			}
 		});
 		GridBagConstraints gbc_btnCrearUsuario = new GridBagConstraints();
@@ -139,7 +140,7 @@ public class VentanaLogin extends JFrame {
 		JButton btnLogin = new JButton("Entrar");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				output.println("entrar-usuario:" + textUsuario.getText() + ",contrasenya:" + textConstrasenya.getText());
+				output.println("entrar-usuario:" + textUsuario.getText() + ",contrasenya:" + textContrasenya.getText());
 			}
 		});
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
