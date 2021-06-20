@@ -19,13 +19,10 @@ public class LeerDatos extends Thread{
 		String line = null;
 		boolean repetir = true;
 		while (repetir) {
-			try {
+			try { //Llamar el objeto Tanque que correpondiente para realizar la acción
 				line = leerDatos.readLine();
 				String mensaje = line.substring(line.indexOf(",")+1,line.length());
 				int idTanque = Integer.parseInt(line.substring(0,line.indexOf(",")));
-				//System.out.println(idTanque);
-				//juego.tanques.get(idTanque).moverDerecha();
-//				juego.tanques.get(idTanque).y += 100;
 				switch (mensaje) {
 					case "moverDerecha" :
 						juego.tanques.get(idTanque).moverDerecha();
@@ -43,10 +40,7 @@ public class LeerDatos extends Thread{
 						juego.tanques.get(idTanque).disparar();
 						break;
 				}
-
-				System.out.println(juego.tanques.get(idTanque).x);
-				enviarDatos.enviarMensaje(juego);
-				
+				//enviarDatos.enviarMensaje(juego); //No es necesario porque ya envia datos 60 veces cada segundo
 			} catch (IOException e) {
 				//Eliminar juegador desconectado
 				for (int i = 0; i < juego.tanques.size(); i++) 

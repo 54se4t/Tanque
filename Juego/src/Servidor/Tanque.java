@@ -36,8 +36,7 @@ class ObjetoJuego implements Serializable{
 }
 
 
-
-class Bomba extends ObjetoJuego implements Serializable{
+class Bomba extends ObjetoJuego {
 	private boolean volando = false;
 	private double velocidadVolar;
 	private double velocidadCaer;
@@ -69,15 +68,15 @@ class Bomba extends ObjetoJuego implements Serializable{
 	
 	public void mover() {
 		if (volando == true) {
-			if (anguloVolar <= 9) {
+			if (anguloVolar <= 9) { //Comprobar que dispara a izquierda o derecha.
 				x = x + 2*velocidadVolar - velocidadVolar * anguloVolar / 4.5;
 				y = y - velocidadVolar * anguloVolar / 4.5 + velocidadCaer;
 			} else if (anguloVolar <= 18) {
 				x = x - 2*velocidadVolar + velocidadVolar * (18-anguloVolar) / 4.5;
 				y = y - velocidadVolar * (18-anguloVolar) / 4.5 + velocidadCaer;
 			}
-			velocidadCaer += velocidadCaer/10;
-			if (velocidadVolar >= 0)
+			velocidadCaer += velocidadCaer/10; //Aumenta la velocidad de caer
+			if (velocidadVolar >= 0) //Disminuye la velocidad de volar
 				velocidadVolar -= velocidadVolar/100;
 		}
 		else {
@@ -87,10 +86,10 @@ class Bomba extends ObjetoJuego implements Serializable{
 	}
 }
 
-public class Tanque extends ObjetoJuego implements Serializable{
+public class Tanque extends ObjetoJuego {
 	private final int VELOCIDAD_MOVER = 5;
 	private static int contador = 0; 
-	private int id;
+	private int id; //Id para identificar dentro del juego, es mismo que index del varible ArrayList tanques de la clase Juego
 	private double anguloCanyon = 3;
 	private Bomba bomba = new Bomba();
 	private int vida = 50;
@@ -147,7 +146,7 @@ public class Tanque extends ObjetoJuego implements Serializable{
 		}
 	}
 	public void recargar() {
-		bomba = new Bomba();
+		bomba.volar();
 		setXYbomba();
 	} 
 	
@@ -174,7 +173,7 @@ public class Tanque extends ObjetoJuego implements Serializable{
 	}
 
 	@Override
-	public String toString() {
+	public String toString() { //Los datos para enviar al cliente.
 		return "id:" + id + ",ancho:" + ancho + ",alto:" + alto + ",x:" + x + ",y:" + y + ",anguloCanyon:" + anguloCanyon + ",bombaAlto:" + bomba.alto + ",bombaAncho:" + bomba.ancho + ",bombaX:" + Math.round(bomba.x) + ",bombaY:" + Math.round(bomba.y) + ",vida:" + vida + "|";
 	}
 }

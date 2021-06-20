@@ -34,8 +34,8 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 
 	private final static String SERVER = "127.0.0.1";
 
-	public static int width = 960;
-	public static int height = width / 16 * 9;
+	public static int width = 960; //Ancho de la ventana
+	public static int height = width / 16 * 9; //Alto de la ventana
 	public static int scale = 1;
 
 	private Thread thread;
@@ -44,11 +44,11 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 	private static Socket socket;
 	private static PrintStream output;
 	private String mensaje;
-	private static int id;
+	private static int id; //cuando envia la mensaje de la acci贸n junta con ID para identificar el jugador
 	private static LeerDatos leerdatos;
 	
 	private Fondo fondo;
-	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); //imagen para pintar pixeles del objeto fondo
 	private int[] pixeles = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	private Image arbol, arbolEspejo, regalo, regaloEspejo;
 	
@@ -89,29 +89,23 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 	public void run() {
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
-		final double ns = 1000000000.0 / 60.0;
-		final double actFondo = 1000000000.0 / 120.0;
-		double delta = 0, deltaFondo = 0;
+		final double ns = 1000000000.0 / 60.0; //Velocidad para pintar el fondo(Nieve)
+		double delta = 0;
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
-			deltaFondo += (now - lastTime) / actFondo;
 			lastTime = now;
 			while (delta >= 1) {
 				delta--;
-				render();
-				if (deltaFondo > 1) {
-					fondo.borrar();
-					fondo.pintar();
-					deltaFondo--;
-				}
+				fondo.pintarFondo();
+				fondo.pintarNieve();
 			}
-
+			render();//Pinta el juego, la velocidad es dependiento de la capacidad del ordenador
 		}
 		stop();
 	}
 
-	public void send() {
+	public void send() { //Enviar la acci贸n
 		output.println(id + "," + mensaje);
 	}
 
@@ -125,11 +119,11 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		
 		Graphics g = bs.getDrawGraphics();		
 		
-		//fondo.borrar();
-		//fondo.pintar();
-		for (int i = 0; i < pixeles.length; i++) {
+		for (int i = 0; i < pixeles.length; i++) { //Pintar el fondo
 			pixeles[i] = fondo.pixeles[i];
 		}
+		
+		//Pintar imagenes de decoraci贸n 
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		g.drawImage(arbol,900,(int)(getHeight()*fondo.TIERRA-104), 60, 104 ,null);
 		g.drawImage(arbol,820,(int)(getHeight()*fondo.TIERRA-70), 40, 70 ,null);
@@ -138,13 +132,8 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 		g.drawImage(arbolEspejo,822,(int)(getHeight()*fondo.TIERRA), 40, 70 ,null);
 		g.drawImage(arbolEspejo,852,(int)(getHeight()*fondo.TIERRA), 90, 157 ,null);
 		
-		/*g.drawImage(regalo,-200,(int)(getHeight()*fondo.TIERRA-163), 400, 163 ,null);
-		g.drawImage(regaloEspejo,-190,(int)(getHeight()*fondo.TIERRA), 400, 163 ,null);*/
-		
-		
-		//g.setColor(Color.WHITE);
-		//g.fillRect(0, 0, getWidth(), getHeight());
-		for (int i = 0; i < leerdatos.tanqueX.size(); i++) {
+		//Pintar tanques
+		for (int i = 0; i < leerdatos.tanqueId.size(); i++) {
 			try {
 			int tanqueX = (int)(leerdatos.tanqueX.get(i)+0);
 			int tanqueY = (int) (getHeight()*fondo.TIERRA) - leerdatos.tanqueAlto.get(i);
@@ -154,7 +143,7 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 						g.drawString("Has perdido!!", 100, 100);
 					}
 				} else {
-					g.setColor(Color.black);//ca駉n de tanque
+					g.setColor(Color.black);//ca锟給n de tanque
 					Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
 					g2.setColor(Color.BLACK);
 					g2.rotate(-Math.PI/18*leerdatos.anguloCanyon.get(i), tanqueX + leerdatos.tanqueAncho.get(i)/2, tanqueY);
@@ -192,7 +181,11 @@ public class Ventana extends Canvas implements Runnable, KeyListener {
 					g.fillRect(tanqueX + leerdatos.vida.get(i), tanqueY+60, 50 - leerdatos.vida.get(i), 5);
 				}
 			} catch (IndexOutOfBoundsException e) {
-				// TODO: handle exception
+				/* 
+				 * No hace nada cuando sucede este excepci贸n porque la clase LeerDatos esta siempre
+				 * recibiendo datos y actualizando, es muy frecuente que esta borrando datos y asignando datos
+				 * en el mismo tiempo que pinta el juego.
+				 */
 			}
 			
 		}

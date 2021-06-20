@@ -33,7 +33,4 @@ public class ConexionDB {
 	      }
 		return false;
 	}
-	public void addPartida(String usuario, boolean partida) {
-		
-	}
 }

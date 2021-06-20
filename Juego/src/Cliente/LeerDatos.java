@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-
+/*
+ * Lee y almacena los datos para pinta en el juego
+ */
 public class LeerDatos extends Thread{
 	BufferedReader leerDatos;
 	int id;

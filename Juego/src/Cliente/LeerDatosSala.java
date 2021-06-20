@@ -7,17 +7,18 @@ import java.io.InputStreamReader;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+/*
+ * La parte principar del juego, controla todas la ventanas,
+ * recibe el mensaje del Servidor y realizar eventos que correponde
+ */
 public class LeerDatosSala extends Thread{
-	private final static int PORT = 5003;
-	private final static String SERVER = "127.0.0.1";
 	BufferedReader leerDatos;
 	VentanaSala sala;
 	VentanaLogin login = new VentanaLogin();
 	boolean juegoEmpezado = false;
 	public LeerDatosSala() {
 		try {
-			leerDatos = new BufferedReader(new InputStreamReader(login.socket.getInputStream()));
-			this.leerDatos = leerDatos;
+			this.leerDatos = new BufferedReader(new InputStreamReader(login.socket.getInputStream()));
 			login.setVisible(true);
 			sala = new VentanaSala(login.socket, login.output);
 			sala.setLocationRelativeTo(null);
@@ -36,7 +37,7 @@ public class LeerDatosSala extends Thread{
 			try {
 				line = leerDatos.readLine();
 				System.out.println(line);
-				if (line.indexOf("-") != -1) {
+				if (line.indexOf("-") != -1) { //Comprueba si el mensaje recibido es un evento o es simplemente un texto
 					String evento = line.substring(0, line.indexOf("-"));
 					if (evento.compareTo("crear") == 0 || evento.compareTo("entrar") == 0) {
 						Boolean b = Boolean.parseBoolean(line.substring(line.indexOf("-")+1));
@@ -52,33 +53,33 @@ public class LeerDatosSala extends Thread{
 								sala.setVisible(true);
 								login.setVisible(false);
 							} else {
-								JOptionPane.showInternalMessageDialog(null, "Fallo al iniciar sesión", "ERROR", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showInternalMessageDialog(null, "Fallo al iniciar sesiï¿½n", "ERROR", JOptionPane.ERROR_MESSAGE);
 							}
 							break;
 						}
-						continue;
 					} else {
 						switch (evento) {
 						case "preparar":
 							line = line.substring(line.indexOf("-")+1);
 							line = line.replace("|", "\n");
 							sala.textLista.setText(line);
-							continue bucle;
+							break;
 						case "ERROR":
 							System.out.println(line);
 							String error = line.substring(line.indexOf("-")+1);
 							JOptionPane.showInternalMessageDialog(null, error, "ERROR", JOptionPane.ERROR_MESSAGE);
-							continue bucle;
+							break;
 						case "empezar":
 							if (!juegoEmpezado) {
 								Ventana v = new Ventana();
 								v.main(null);
 								juegoEmpezado = true;
 							}
-							continue bucle;
+							break;
 						}
 					} 
-				}
+				} 
+				else
 					sala.textChat.setText(sala.textChat.getText() + line + "\n");
 			} catch (IOException e) {
 				JOptionPane.showInternalMessageDialog(null, e, "ERROR", JOptionPane.ERROR_MESSAGE);

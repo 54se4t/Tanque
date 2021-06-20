@@ -11,7 +11,7 @@ public class Juego extends Thread implements Serializable{
 		this.enviarDatos = enviarDatos;
 	}
 	
-	public void run() {
+	public void run() { //Actualiza los datos y enviar estos datos 60 veces cada segundo.
 		long lastTime = System.nanoTime();
 		final double ns = 1000000000.0 / 60.0;
 		double delta = 0;
@@ -23,12 +23,12 @@ public class Juego extends Thread implements Serializable{
 			lastTime = now;
 			while (delta >= 1) {
 				for (Tanque t : tanques) {
-					t.getBomba().mover();
-					if (t.getBomba().y > 304) {
+					t.getBomba().mover(); //Cuando dispara, mueve la bonba
+					if (t.getBomba().y > 304) { //Cuando la bomba toca el suelo, recarga.
 						for (Tanque t2 : tanques) {
 							t2.recibirDanyo(t.getBomba().getX());
 						}
-						ckPartida();
+						ckPartida(); //Comprobar si la partida solo queda un jugador vivo y reinicia.
 						t.recargar();
 					}
 				}
@@ -59,11 +59,11 @@ public class Juego extends Thread implements Serializable{
 			reempezarPartida();
 	}
 	public void reempezarPartida() {
-		System.out.println("reempezarPartida");
 		for (Tanque t : tanques) {
 			t.setXAleatoria();
 			t.setXYbomba();
-			t.setVida(50);
+			if (t.getVida() != -100)
+				t.setVida(50);
 		}
 	}
 }

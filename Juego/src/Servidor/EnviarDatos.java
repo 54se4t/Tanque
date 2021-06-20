@@ -2,7 +2,9 @@ package Servidor;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-
+/*
+ * Clase para enviar datos del juego: posision, tamaño y vida.
+ */
 public class EnviarDatos {
 	ArrayList<PrintStream> outputs = new ArrayList<PrintStream>();
 	

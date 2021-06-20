@@ -10,14 +10,17 @@ import java.net.SocketException;
 import java.nio.Buffer;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+/*
+ * Es la sala de charla y puede comprobar si estan preparado o no
+ *  todos los jugadores para empezar juego
+ */
 public class Sala extends Thread{
     private final static int PORT = 5004;
 	ServerSocket servidor;
 	
 	public Sala() {
 		try {
-			servidor = new ServerSocket(PORT);
+			servidor = new ServerSocket(PORT); //Socket de la sala
 			EscucharConexionSala ecs = new EscucharConexionSala(servidor);
 			ecs.start();
 			
@@ -55,7 +58,6 @@ class EscucharConexionSala extends Thread {
 		}
 	}
 }
-
 class LeerDatosSala extends Thread {
 	private BufferedReader leerDatos = null;
 	private ConexionDB conexion;
@@ -81,7 +83,7 @@ class LeerDatosSala extends Thread {
 			try {
 				line = leerDatos.readLine();
 				System.out.println(line);
-				if (line.indexOf("-") != -1) {
+				if (line.indexOf("-") != -1) { //Comprueba si el mensaje recibido es un evento o simplemente un texto
 						String evento = line.substring(0, line.indexOf("-"));
 					if (evento.compareTo("crear") == 0 || evento.compareTo("entrar") == 0) {
 						line = line.substring(line.indexOf("-")+1);
@@ -99,25 +101,24 @@ class LeerDatosSala extends Thread {
 									break bucle;
 								}
 							}
-							if (conexion.ckCuenta(usuario, contrasenya)) {
+							if (conexion.ckCuenta(usuario, contrasenya)) { //Añade el nuevo juegador a la lista
 								this.usuario = usuario;
 								enviarDatos.usuario.add(usuario);
 								enviarDatos.preparado.add(false);
 								enviarDatos.enviarMensajePreparado();
 							} else {
-								enviarDatos.outputs.remove(enviarDatos.outputs.size()-1);
+								output.println("ERROR-Cuenta no valida.");
 							}
 							output.println("entrar-" + conexion.ckCuenta(usuario, contrasenya));
 							break;
 						}
 						continue;
 					} else if (evento.compareTo("preparar") == 0){
-							enviarDatos.prepararUsuario(usuario);
-							continue;
+							enviarDatos.prepararUsuario(usuario); //Enviar lista de preparar
 					} 
-				} 
-				enviarDatos.enviarMensaje(usuario + ":" + line);
-			} catch (SocketException e) {
+				} else
+					enviarDatos.enviarMensaje(usuario + ":" + line);
+			} catch (SocketException e) { //Excepción cuando disconecta un juegador, elimina todos los datos de este jugador
 				output.println("usuario:" + usuario + " ha abandonado la partida");
 				for (int i = 0; i < enviarDatos.usuario.size(); i++) {
 					if (usuario.compareTo(enviarDatos.usuario.get(i)) == 0) {
@@ -137,39 +138,36 @@ class LeerDatosSala extends Thread {
 
 class EnviarDatosSala {
 	ArrayList<PrintStream> outputs = new ArrayList<PrintStream>();
-	ArrayList<String> usuario = new ArrayList<String>();
-	ArrayList<Boolean> preparado = new ArrayList<Boolean>();
+	ArrayList<String> usuario = new ArrayList<String>(); //Lista de usuarios que corresponde a la lista de preparar
+	ArrayList<Boolean> preparado = new ArrayList<Boolean>(); //Lista de preparar
 	
 	public void addOutput(PrintStream output) {
 		outputs.add(output);
 	}
-	public void enviarMensaje(String mensaje) {
+	public void enviarMensaje(String mensaje) { //Reenviar mensaje de la charla
 		for (PrintStream p : outputs)
 			p.println(mensaje);
 	}
 	public void prepararUsuario(String usuario) {
-		Boolean todos = true;
+		Boolean todosPreparado = true;
 		for (int i = 0; i < this.usuario.size(); i++) {
 			if (this.usuario.get(i).compareTo(usuario) == 0) {
 				preparado.set(i, true);
 				enviarMensajePreparado();
 			}
 			if (!preparado.get(i))
-				todos = false;
+				todosPreparado = false;
 		}
-		System.out.println(todos);
-		System.out.println(this.usuario.size());
-		if (this.usuario.size() >= 2 && todos) {
+		if (this.usuario.size() >= 2 && todosPreparado) {
 			System.out.println("empezar");
 			for (PrintStream p : outputs)
-				p.println("empezar-");
+				p.println("empezar-"); //Mensjae "empezar-" es la clave para comprobar el cliente
 		}
 	}
 	public void enviarMensajePreparado() {
-		String mensaje = "preparar-";
+		String mensaje = "preparar-"; //Mensjae "preparar-" es la clave para comprobar el cliente
 		for (int i = 0; i < usuario.size(); i++)
 			mensaje += ("[" + usuario.get(i) + "]Preparado:" + preparado.get(i) + "|");
-		System.out.println(mensaje);
 		for (PrintStream p : outputs)
 			p.println(mensaje);
 	}
