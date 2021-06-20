@@ -8,10 +8,3 @@ create table cuenta (
 	usuario varchar(20) primary key,
     contrasenya varchar(20)
 );
-
-create table historia (
-	usuario varchar(20) primary key,
-    ganas integer,
-    perdidas integer,
-    constraint foreign key(usuario) references cuenta(usuario)
-);
